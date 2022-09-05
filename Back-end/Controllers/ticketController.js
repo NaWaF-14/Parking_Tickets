@@ -1,4 +1,5 @@
 const Ticket = require("../Models/ticket");
+const Parking = require("../Models/parking");
 const User = require("../Models/user");
 
 // when the user purchase a ticket
@@ -13,7 +14,16 @@ const purchaseTicket = async (req, res) => {
       user: userID,
       parkingLocation: parkingID,
     });
-    res.send("User has purchased a ticket!!");
+    const parking = await Parking.findById(parkingID);
+    if (parking.parkingNumber >= 1) {
+      parking.parkingNumber = parking.parkingNumber - 1;
+      await Parking.findByIdAndUpdate(parkingID, {
+        parkingNumber: parking.parkingNumber,
+      });
+      res.send("User has purchased a ticket!!");
+    } else {
+      res.send("There is no more parking here.");
+    }
   } catch (error) {
     console.log(error.message);
   }
