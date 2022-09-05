@@ -1,3 +1,3 @@
-# Parking Tickets System.
+# Parking Tickets.
 
-Parking Tickets System help the people to find the parking easier and faster than ever.
+A website builds to serve the people who are searching for parking, the website makes it easier and faster to look for a parking and pay for it.
