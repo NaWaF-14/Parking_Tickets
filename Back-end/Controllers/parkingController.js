@@ -30,3 +30,5 @@ const specificParking = async (req, res) => {
     console.log(error.message);
   }
 };
+
+module.exports = { addParking, allParking, specificParking };
