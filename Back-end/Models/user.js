@@ -4,21 +4,24 @@ const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const passComplexity = require("joi-password-complexity");
 
-const userSchema = new Schema({
-  userName: {
-    type: String,
-    required: true,
-    unique: true,
+const userSchema = new Schema(
+  {
+    userName: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {

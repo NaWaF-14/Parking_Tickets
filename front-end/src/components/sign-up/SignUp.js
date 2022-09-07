@@ -1,26 +1,34 @@
 import { useState } from "react";
+// import axiosInstance from "../../api";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./signup.css";
 
 const SignUp = () => {
+  const baseURL = "http://localhost:8080";
+
+  // to control the state of the input data
   const [data, setData] = useState({
     userName: "",
     email: "",
     password: "",
   });
+
+  // to control the error message
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
+  // to handle the change on the input
   const handleChange = ({ currentTarget: input }) => {
     setData({ ...data, [input.name]: input.value });
   };
 
+  // to submit the user information to the database
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:8080/user/register";
-      const { data: res } = await axios.post(url, data);
+      const { data: res } = await axios.post(baseURL + "/user/register", data);
       navigate("/login");
       console.log(res.message);
     } catch (error) {
