@@ -1,23 +1,22 @@
 const Ticket = require("../Models/ticket");
 const Parking = require("../Models/parking");
-const User = require("../Models/user");
+const { User } = require("../Models/user");
 
 // when the user purchase a ticket
 const purchaseTicket = async (req, res) => {
   try {
-    const userID = req.params.userID;
-    const parkingID = req.params.parkingID;
+    const user = await User.findById(req.params.userID);
+    const parking = await Parking.findById(req.params.parkingID);
     await Ticket.create({
       startDate: req.body.startDate,
       endDate: req.body.endDate,
       price: req.body.price,
-      user: userID,
-      parkingLocation: parkingID,
+      user: user,
+      parkingLocation: parking,
     });
-    const parking = await Parking.findById(parkingID);
     if (parking.parkingNumber >= 1) {
       parking.parkingNumber = parking.parkingNumber - 1;
-      await Parking.findByIdAndUpdate(parkingID, {
+      await Parking.findByIdAndUpdate(parking._id, {
         parkingNumber: parking.parkingNumber,
       });
       res.send("User has purchased a ticket!!");
@@ -32,9 +31,11 @@ const purchaseTicket = async (req, res) => {
 // display all the user tickets
 const userTickets = async (req, res) => {
   try {
-    const id = req.params.id; // ID of the user
-    const user = await User.findById(id);
-    const result = await Ticket.find({ user: user._id });
+    const user = await User.findById(req.params.id);
+    const result = await Ticket.find({
+      user: user._id,
+      isDeleted: false,
+    }).populate(["user", "parkingLocation"]);
     res.send(result);
   } catch (error) {
     console.log(error.message);
@@ -52,4 +53,19 @@ const updateTicket = async (req, res) => {
   }
 };
 
-module.exports = { purchaseTicket, userTickets, updateTicket };
+const deleteTicket = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await Ticket.findByIdAndUpdate(id, { isDeleted: true });
+    const parking = await Parking.findById(result.parkingLocation);
+    parking.parkingNumber = parking.parkingNumber + 1;
+    await Parking.findByIdAndUpdate(parking._id, {
+      parkingNumber: parking.parkingNumber,
+    });
+    res.send("Ticket is deleted and parking number is increased!");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { purchaseTicket, userTickets, updateTicket, deleteTicket };

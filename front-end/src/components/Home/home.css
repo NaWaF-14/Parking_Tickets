@@ -49,3 +49,22 @@
   margin-top: 0;
   color: #1c2237;
 }
+
+.navy_btn,
+.red_btn {
+  border: none;
+  outline: none;
+  padding: 12px 0;
+  background-color: #1c2237;
+  border-radius: 20px;
+  width: 180px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.red_btn {
+  background-color: red;
+  color: white;
+  margin: 10px;
+}
