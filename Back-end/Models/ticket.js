@@ -5,11 +5,11 @@ const Schema = mongoose.Schema;
 const ticketSchema = new Schema(
   {
     startDate: {
-      type: String,
+      type: Date,
       required: true,
     },
     endDate: {
-      type: String,
+      type: Date,
       required: true,
     },
     price: {
