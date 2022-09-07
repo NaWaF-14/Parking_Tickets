@@ -4,6 +4,7 @@ import { Modal } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Moment from "moment";
 
 const Home = () => {
   const baseURL = "http://localhost:8080";
@@ -186,16 +187,18 @@ const Home = () => {
                     onSubmit={() => handleSubmit(item._id)}
                   >
                     <h1>Scheduling the Ticket</h1>
+                    <label>Start Date:</label>
                     <input
-                      type="text"
+                      type="date"
                       name="startDate"
                       onChange={handleChange}
                       value={data.startDate}
                       required
                       className="input"
                     />
+                    <label>End Date:</label>
                     <input
-                      type="text"
+                      type="date"
                       name="endDate"
                       onChange={handleChange}
                       value={data.endDate}
@@ -223,9 +226,13 @@ const Home = () => {
                   Location: {tic.parkingLocation.parkingLocation}
                 </Card.Header>
                 <Card.Body>
-                  <Card.Title>Price: {tic.price}</Card.Title>
-                  <Card.Text>Start Date: {tic.startDate}</Card.Text>
-                  <Card.Text>End Date: {tic.endDate}</Card.Text>
+                  <Card.Title>City: {tic.parkingLocation.city}</Card.Title>
+                  <Card.Text>
+                    Start Date: {Moment(tic.startDate).format("DD-MM-YYYY")}
+                  </Card.Text>
+                  <Card.Text>
+                    End Date: {Moment(tic.endDate).format("DD-MM-YYYY")}
+                  </Card.Text>
                   <button
                     className="navy_btn"
                     onClick={() => handleModal(tic._id)}
